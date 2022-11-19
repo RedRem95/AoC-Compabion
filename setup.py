@@ -1,10 +1,8 @@
 import setuptools
 import os
 
-
-with open(os.path.join(os.path.dirname(__file__), "src", "AoC_Companion", "version.txt"), "r") as fv:
+with open(os.path.join(os.path.dirname(__file__), "AoC_Companion", "version.txt"), "r") as fv:
     __version__ = fv.read().strip()
-
 
 with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -32,6 +30,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
     entry_points={
@@ -39,9 +38,9 @@ setuptools.setup(
             'AoC_run = AoC_Companion.AoC.__main__:main',
         ],
     },
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    packages=setuptools.find_packages(include=['AoC_Companion', 'AoC_Companion.*']),
     python_requires=">=3.6",
     install_requires=requirements,
     requires=requirements,
+    include_package_data=True,
 )
