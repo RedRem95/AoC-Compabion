@@ -16,9 +16,8 @@ from typing import Callable, AnyStr
 
 import numpy as np
 
-from AoC_Companion.Day import Task
-from AoC_Companion.test import TestData
-from AoC_Companion.Preprocess import Preprocessor
+from AoC_Companion import Task
+from AoC_Companion import Preprocessor
 
 
 @Task(year=2021, day=1, task=1)

@@ -31,7 +31,7 @@ PyPi package is coming soon. Until then installation is done via
 
 .. code-block::
 
-    $ pip git+https://github.com/RedRem95/AoC-Companion.git
+    $ pip install git+https://github.com/RedRem95/AoC-Companion.git
 
 
 Usage
