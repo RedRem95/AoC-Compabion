@@ -1,11 +1,18 @@
 import setuptools
-from src.AoC_Companion import __version__
+import os
 
-with open("README.md", "r", encoding="utf-8") as fh:
+
+with open(os.path.join(os.path.dirname(__file__), "src", "AoC_Companion", "version.txt"), "r") as fv:
+    __version__ = fv.read().strip()
+
+
+with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+requirements = ["requests"]
+
 setuptools.setup(
-    name="AoC-Companion-RedRem",
+    name="AoC_Companion",
     version=__version__,
     author="RedRem",
     description="Companion for AoC_Companion development in python",
@@ -17,14 +24,24 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/RedRem95/AoC-Companion/issues",
     },
     classifiers=[
-        "Programming Language :: Python :: 3",
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
         "License :: OSI Approved :: Apache 2.0",
-        "Operating System :: OS Independent",
+        'Natural Language :: English',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
     ],
+    entry_points={
+        'console_scripts': [
+            'AoC_run = AoC_Companion.AoC.__main__:main',
+        ],
+    },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
-    install_requires=[
-        'requests'
-    ]
+    install_requires=requirements,
+    requires=requirements,
 )

@@ -21,7 +21,7 @@ from typing import Optional
 import requests
 
 
-def input_url(day: int, year: int) -> str:
+def input_url(year: int, day: int) -> str:
     return f'https://adventofcode.com/{year}/day/{day}/input'
 
 
