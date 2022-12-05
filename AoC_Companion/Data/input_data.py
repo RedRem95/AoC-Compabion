@@ -44,6 +44,6 @@ def get_data(year: int, day: int, task: Optional[int] = None) -> Tuple[Any, int]
         if ret.strip() not in (__NOT_RELEASED, __NOT_LOGGED_IN):
             with open(data_file, "w", encoding="utf-8") as f_write:
                 f_write.write(ret)
-    ret = ret.strip()
+    # ret = ret.strip()
     ret, count = Collection.preprocess(data=ret, year=year, day=day, task=task)
     return ret, count
