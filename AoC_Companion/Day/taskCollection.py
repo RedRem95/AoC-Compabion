@@ -33,41 +33,43 @@ class TaskCollection(object):
             self._collection[k] = (task_fnc, test_data)
 
     @staticmethod
-    @lru_cache()
-    def _create_filter(year: int = None, day: int = None, task: int = None):
+    # @lru_cache()
+    def _create_filter(years: List[int] = None, days: List[int] = None, tasks: List[int] = None):
         def _filter(_k):
-            if year is not None and not year == _k[0]:
+            if years is not None and len(years) > 0 and _k[0] not in years:
                 return False
-            if day is not None and not day == _k[1]:
+            if days is not None and len(days) > 0 and _k[1] not in days:
                 return False
-            if task is not None and task == _k[2]:
+            if tasks is not None and len(tasks) > 0 and _k[2] not in tasks:
                 return False
             return True
         return _filter
 
-    def filter_keys(self, year: int = None, day: int = None, task: int = None) -> List[Tuple[int, int, int]]:
-        _filter = self._create_filter(year=year, day=day, task=task)
+    def filter_keys(
+            self, years: List[int] = None, days: List[int] = None, tasks: List[int] = None
+    ) -> List[Tuple[int, int, int]]:
+        _filter = self._create_filter(years=years, days=days, tasks=tasks)
         return sorted((x for x in self._collection.keys() if _filter(_k=x)))
 
-    def get(self, year: int = None, day: int = None, task: int = None) -> List[Callable]:
-        return [self._collection[k][0] for k in self.filter_keys(year=year, day=day, task=task)]
+    def get(self, years: List[int] = None, days: List[int] = None, tasks: List[int] = None) -> List[Callable]:
+        return [self._collection[k][0] for k in self.filter_keys(years=years, days=days, tasks=tasks)]
 
     def iterate(
-            self, year: int = None, day: int = None, task: int = None
+            self, years: List[int] = None, days: List[int] = None, tasks: List[int] = None
     ) -> Generator[None, Tuple[Tuple[int, int, int], Callable, List[TestData]], None]:
-        keys = self.filter_keys(year=year, day=day, task=task)
+        keys = self.filter_keys(years=years, days=days, tasks=tasks)
         for k in keys:
             yield k, *self._collection[k]
 
     def available_years(self) -> List[int]:
         return sorted(set(x[0] for x in self._collection.keys()))
 
-    def available_days(self, year: int = None) -> List[int]:
-        _filter = self._create_filter(year=year)
+    def available_days(self, years: List[int] = None) -> List[int]:
+        _filter = self._create_filter(years=years)
         return sorted(set(x[1] for x in self._collection.keys() if _filter(_k=x)))
 
-    def available_tasks(self, year: int = None, day: int = None) -> List[int]:
-        _filter = self._create_filter(year=year, day=day)
+    def available_tasks(self, years: List[int] = None, days: List[int] = None) -> List[int]:
+        _filter = self._create_filter(years=years, days=days)
         return sorted(set(x[2] for x in self._collection.keys() if _filter(_k=x)))
 
 

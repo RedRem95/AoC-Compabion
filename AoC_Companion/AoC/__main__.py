@@ -27,14 +27,21 @@ def main():
             return f"'{self.name}'"
 
         @classmethod
-        def apply(cls, special_type, coll, default = None):
-            if isinstance(special_type, cls):
-                if special_type == cls.first:
-                    return min(coll) if len(coll) > 0 else None
-                if special_type == cls.latest:
-                    return max(coll) if len(coll) > 0 else None
-                raise Exception(f"{self} not supported")
-            return default
+        def apply(cls, elements: list, coll) -> list:
+            ret = []
+            d = {
+                cls.first: min(coll) if len(coll) > 0 else None,
+                cls.latest: max(coll) if len(coll) > 0 else None,
+            }
+            for element in elements:
+                if isinstance(element, cls):
+                    if element in d:
+                        ret.append(d[element])
+                    else:
+                        raise Exception(f"{element} not supported")
+                else:
+                    ret.append(element)
+            return ret
 
     def _my_type(inp: str):
         if inp is None:
@@ -55,16 +62,15 @@ def main():
                              "your other code. You can use relative imports in these codes")
     parser.add_argument("-l", "--log", dest="log", action="store_true", required=False,
                         help="If set will include logs defined in tasks")
-    parser.add_argument("--year", dest="year", default=None, required=False, type=_my_type,
+    parser.add_argument("--year", dest="year", default=[], required=False, type=_my_type, nargs="+",
                         help=f"Define year of tasks you want to run. "
                              f"{', '.join([str(x) for x in _SpecialType])} and a positive number supported")
-    parser.add_argument("--day", dest="day", default=None, required=False, type=_my_type,
+    parser.add_argument("--day", dest="day", default=[], required=False, type=_my_type, nargs="+",
                         help=f"Define day of tasks you want to run. Options influenced by --year. "
                              f"{', '.join([str(x) for x in _SpecialType])} and a positive number supported")
-    parser.add_argument("--task", dest="task", default=None, required=False, type=_my_type,
+    parser.add_argument("--task", dest="task", default=[], required=False, type=_my_type, nargs="+",
                         help=f"Define tasks you want to run. Options influenced by --year and --day. "
                              f"{', '.join([str(x) for x in _SpecialType])} and a positive number supported")
-
 
     args = parser.parse_args()
 
@@ -72,15 +78,15 @@ def main():
     from AoC_Companion.Day import Collection
     import_stuff(args.source)
 
-    year = args.year
-    day = args.day
-    task = args.task
+    years = args.year
+    days = args.day
+    tasks = args.task
 
-    year = _SpecialType.apply(special_type=year, coll=Collection.available_years(), default=year)
-    day = _SpecialType.apply(special_type=day, coll=Collection.available_days(year=year), default=day)
-    task = _SpecialType.apply(special_type=task, coll=Collection.available_tasks(year=year, day=day), default=task)
+    years = _SpecialType.apply(elements=years, coll=Collection.available_years())
+    days = _SpecialType.apply(elements=days, coll=Collection.available_days(years=years))
+    tasks = _SpecialType.apply(elements=tasks, coll=Collection.available_tasks(years=years, days=days))
 
-    run(log=args.log, year=year, day=day, task=task)
+    run(log=args.log, years=years, days=days, tasks=tasks)
 
 
 if __name__ == "__main__":

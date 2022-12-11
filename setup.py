@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), "AoC_Companion", "version.txt"
 with open("README.rst", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-requirements = ["requests"]
+requirements = ["requests", "nose"]
 
 setuptools.setup(
     name="AoC_Companion",

@@ -24,7 +24,10 @@ from AoC_Companion import __version__
 from AoC_Companion.Data.input_data import get_data
 
 
-def run(year: int = None, day: int = None, task: int = None, stream: Callable[[AnyStr], None] = None, log: bool = True):
+def run(
+        years: List[int] = None, days: List[int] = None, tasks: List[int] = None,
+        stream: Callable[[AnyStr], None] = None, log: bool = True
+):
     if stream is None:
         stream = sys.stdout.write
 
@@ -40,10 +43,10 @@ def run(year: int = None, day: int = None, task: int = None, stream: Callable[[A
 
     run_time = 0
     counter = 0
-    years = set()
-    days = set()
+    years_set = set()
+    days_set = set()
 
-    for ydt, fnc, _ in Collection.iterate(year=year, day=day, task=task):
+    for ydt, fnc, _ in Collection.iterate(years=years, days=days, tasks=tasks):
         data, preproc_count = get_data(year=ydt[0], day=ydt[1], task=ydt[2])
         if not first:
             stream(f"┣{'━' * 30}\n")
@@ -56,9 +59,9 @@ def run(year: int = None, day: int = None, task: int = None, stream: Callable[[A
 
         run_time += res.exec_time
         counter += 1
-        years.add(ydt[:1])
-        days.add(ydt[:2])
+        years_set.add(ydt[:1])
+        days_set.add(ydt[:2])
 
         first = False
 
-    stream(f"┗Ran {counter} tasks from {len(years)} years and {len(days)} days in {datetime.timedelta(seconds=run_time)}\n")
+    stream(f"┗ Ran {counter} tasks from {len(years)} years and {len(days)} days in {datetime.timedelta(seconds=run_time)}\n")
