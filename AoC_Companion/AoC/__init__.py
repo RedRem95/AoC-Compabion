@@ -15,9 +15,40 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import enum
+import uuid
 
 from AoC_Companion.AoC.run import run
 from AoC_Companion.AoC.importing import import_stuff
 
-__all__ = ["run", "import_stuff"]
+
+class SpecialType(enum.Enum):
+    latest = uuid.uuid4()
+    first = uuid.uuid4()
+
+    def __str__(self):
+        return f"'{self.name}'"
+
+    @classmethod
+    def apply(cls, elements: list, coll) -> list:
+        ret = []
+        d = {
+            cls.first: min(coll) if len(coll) > 0 else None,
+            cls.latest: max(coll) if len(coll) > 0 else None,
+        }
+        for element in elements:
+            if isinstance(element, cls):
+                if element in d:
+                    ret.append(d[element])
+                else:
+                    raise Exception(f"{element} not supported")
+            else:
+                ret.append(element)
+        return ret
+
+
+del enum
+del uuid
+
+__all__ = ["run", "import_stuff", "SpecialType"]
 

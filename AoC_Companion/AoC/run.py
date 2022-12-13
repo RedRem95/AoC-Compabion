@@ -64,4 +64,4 @@ def run(
 
         first = False
 
-    stream(f"┗ Ran {counter} tasks from {len(years)} years and {len(days)} days in {datetime.timedelta(seconds=run_time)}\n")
+    stream(f"┗ Ran {counter} tasks from {len(years_set)} years and {len(days_set)} days in {datetime.timedelta(seconds=run_time)}\n")
